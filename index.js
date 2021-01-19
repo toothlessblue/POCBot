@@ -53,8 +53,8 @@ client.on('message', async (message) => {
     }
 
     if (message.channel.id === '800404487058489394') { // votes channel
-        await message.react('🇽');
         await message.react('☑️');
+        await message.react('🇽');
     }
 });
 
