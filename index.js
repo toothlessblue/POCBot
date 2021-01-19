@@ -51,6 +51,11 @@ client.on('message', async (message) => {
             message.channel.send(reply);
         });
     }
+
+    if (message.channel.id === '800404487058489394') { // votes channel
+        await message.react('🇽');
+        await message.react('☑️');
+    }
 });
 
 client.login('ODAwODc1Mzk2NDgwMzY4NjYy.YAYfVg.zVN4BkAjsWBM276thooAAWR2ejI');
