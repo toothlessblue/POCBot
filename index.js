@@ -1,8 +1,6 @@
 const Discord = require('discord.js');
 const mcutil = require("minecraft-server-util");
 const client = new Discord.Client();
-const poc3address = 'poc3.bloodcoffeegames.com';
-const poc2address = 'poc2.bloodcoffeegames.com';
 
 client.login('ODAwODc1Mzk2NDgwMzY4NjYy.YAYfVg.zVN4BkAjsWBM276thooAAWR2ejI');
 client.once('ready', async () => {
@@ -61,12 +59,15 @@ client.once('ready', async () => {
                 }
 
                 message.channel.send(reply);
+
+                console.log('Replied with server status');
             });
         }
 
         if (message.channel.id === '800404487058489394') { // votes channel
             await message.react('☑️');
             await message.react('🇽');
+            console.log('Added reacts to voting channel message')
         }
     });
 
@@ -87,4 +88,6 @@ client.once('ready', async () => {
     }
 
     setInterval(serverStatusNotify, 30000)
+
+    console.log('Ready!');
 });
