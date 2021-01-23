@@ -4,58 +4,87 @@ const client = new Discord.Client();
 const poc3address = 'poc3.bloodcoffeegames.com';
 const poc2address = 'poc2.bloodcoffeegames.com';
 
-const servers = [
-    'poc3.bloodcoffeegames.com',
-    'poc2.bloodcoffeegames.com',
-];
+client.login('ODAwODc1Mzk2NDgwMzY4NjYy.YAYfVg.zVN4BkAjsWBM276thooAAWR2ejI');
+client.once('ready', async () => {
+    const modChatChannel = await client.channels.fetch('682043432574648435', true);
 
-async function getServerStatus() {
-    let statuses = {};
+    const servers = [
+        {
+            ip: 'poc3.bloodcoffeegames.com',
+            lastState: false
+        },
+        {
+            ip: 'poc2.bloodcoffeegames.com',
+            lastState: false
+        },
+    ];
 
-    for (let server of servers) {
-        statuses[server] = await (async () => {
-            try {
-                return await mcutil.status(server);
-            } catch {
-                return null;
-            }
-        })();
+    async function getServerStatus() {
+        let statuses = {};
+        for (let server of servers) {
+            statuses[server.ip] = await (async () => {
+                try {
+                    return await mcutil.status(server.ip);
+                } catch {
+                    return null;
+                }
+            })();
+        }
+        return statuses;
     }
 
-    return statuses;
-}
+    getServerStatus().then(res => {
+        for (let server in servers) {
+            if (servers.hasOwnProperty(server)) {
+                servers[server].lastState = res[servers[server].ip] !== null;
+            }
+        }
+    });
 
-client.once('ready', () => {
-    console.log('Ready!');
-});
+    client.on('message', async (message) => {
+        if (message.content === '!server') {
+            await getServerStatus().then((res) => {
+                let reply = 'Here\'s the server statuses! \n\n';
 
-client.on('message', async (message) => {
-    if (message.content === '!server') {
-        await getServerStatus().then((res) => {
-            let reply = 'Here\'s the server statuses! \n\n';
+                for (let server in res) {
 
-            for (let server in res) {
+                    if (res[server] !== null) {
+                        reply += ':green_square: ';
+                        reply += server;
+                        reply += '   |   ' + res[server].onlinePlayers + ' / ' + res[server].maxPlayers + ' players.';
+                    } else {
+                        reply += ':red_square: '
+                        reply += server;
+                    }
 
-                if (res[server] !== null) {
-                    reply += ':green_square: ';
-                    reply += server;
-                    reply += '   |   ' + res[server].onlinePlayers + ' / ' + res[server].maxPlayers + ' players.';
-                } else {
-                    reply += ':red_square: '
-                    reply += server;
+                    reply += '\n'
                 }
 
-                reply += '\n'
-            }
+                message.channel.send(reply);
+            });
+        }
 
-            message.channel.send(reply);
+        if (message.channel.id === '800404487058489394') { // votes channel
+            await message.react('☑️');
+            await message.react('🇽');
+        }
+    });
+
+    function serverStatusNotify() {
+        getServerStatus().then(res => {
+            for (let server in servers) {
+                if (servers.hasOwnProperty(server)) {
+                    if (res[servers[server].ip] === null && servers[server].lastState) {
+                        modChatChannel.send(servers[server].ip + ' is now down!');
+                    } else if (res[servers[server].ip] !== null && !servers[server].lastState) {
+                        modChatChannel.send(servers[server].ip + ' is now up!')
+                    }
+
+                    servers[server].lastState = res[servers[server].ip] !== null;
+                }
+            }
         });
     }
 
-    if (message.channel.id === '800404487058489394') { // votes channel
-        await message.react('☑️');
-        await message.react('🇽');
-    }
+    setInterval(serverStatusNotify, 30000)
 });
-
-client.login('ODAwODc1Mzk2NDgwMzY4NjYy.YAYfVg.zVN4BkAjsWBM276thooAAWR2ejI');
