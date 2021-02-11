@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const mcutil = require("minecraft-server-util");
 const client = new Discord.Client();
 
-client.login('ODAwODc1Mzk2NDgwMzY4NjYy.YAYfVg.zVN4BkAjsWBM276thooAAWR2ejI');
+client.login('ODAwODc1Mzk2NDgwMzY4NjYy.YAYfVg.3RNXI_zc3ihpdY6VnAZ7lz3B6uw');
 client.once('ready', async () => {
     const modChatChannel = await client.channels.fetch('682043432574648435', true);
 
@@ -87,7 +87,7 @@ client.once('ready', async () => {
         });
     }
 
-    setInterval(serverStatusNotify, 30000)
+    //setInterval(serverStatusNotify, 30000)
 
     console.log('Ready!');
 });
