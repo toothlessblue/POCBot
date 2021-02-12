@@ -98,7 +98,7 @@ client.once('ready', async () => {
         });
     }
 
-    setInterval(serverStatusNotify, 30000)
+    //setInterval(serverStatusNotify, 30000)
 
     console.log('Ready!');
 });
