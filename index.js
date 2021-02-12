@@ -1,8 +1,19 @@
 const Discord = require('discord.js');
 const mcutil = require("minecraft-server-util");
 const client = new Discord.Client();
+const fs = require('fs');
 
-client.login('ODAwODc1Mzk2NDgwMzY4NjYy.YAYfVg.zVN4BkAjsWBM276thooAAWR2ejI');
+let token;
+
+try {
+    token = fs.readFileSync('token.txt').toString();
+} catch {
+    console.log('token.txt doesn\'t exist.');
+
+    process.exit(0);
+}
+
+client.login(token);
 client.once('ready', async () => {
     const modChatChannel = await client.channels.fetch('682043432574648435', true);
 
