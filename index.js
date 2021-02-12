@@ -13,7 +13,6 @@ try {
     process.exit(0);
 }
 
-client.login(token);
 client.once('ready', async () => {
     const modChatChannel = await client.channels.fetch('682043432574648435', true);
 
@@ -102,3 +101,5 @@ client.once('ready', async () => {
 
     console.log('Ready!');
 });
+
+client.login(token);
