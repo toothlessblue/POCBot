@@ -7,7 +7,7 @@ let token;
 
 try {
     token = fs.readFileSync('token.txt').toString();
-} catch {
+} catch(e) {
     console.log('token.txt doesn\'t exist.');
 
     process.exit(0);
@@ -33,7 +33,7 @@ client.once('ready', async () => {
             statuses[server.ip] = await (async () => {
                 try {
                     return await mcutil.status(server.ip);
-                } catch {
+                } catch(e) {
                     return null;
                 }
             })();
